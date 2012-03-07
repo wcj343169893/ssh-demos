@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="
+			http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+			http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd
+			http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
+	<bean id="dataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<property name="url" value="jdbc:mysql://localhost:3306/sshframework" />
+		<property name="username" value="root" />
+		<property name="password" value="123456" />
+	</bean>
+
+	<!-- JNDI DataSource for J2EE environments -->
+	<!--
+		<bean id="dataSource"
+		class="org.springframework.jndi.JndiObjectFactoryBean"> <property
+		name="jndiName" value="java:comp/env/jdbc/petclinic"/> </bean>
+	-->
+
+	<!-- Hibernate SessionFactory -->
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="mappingResources">
+			<list>
+				<value>com/ssh/demo/entity/hbm/Blog.hbm.xml</value>
+			</list>
+		</property>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">${hibernate.dialect}</prop>
+				<prop key="hibernate.generate_statistics">true</prop>
+			</props>
+		</property>
+		<property name="eventListeners">
+			<map>
+				<entry key="merge">
+					<bean
+						class="org.springframework.orm.hibernate3.support.IdTransferringMergeEventListener" />
+				</entry>
+			</map>
+		</property>
+	</bean>
+	<!-- transactionManager -->
+	<bean id="transactionManager"
+		class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<!-- dao -->
+	<bean id="blogDao" class="com.ssh.demo.dao.BlogDao">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<!-- 事物管理 -->
+	<tx:advice id="txAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+			<tx:method name="attach*" propagation="REQUIRED" />
+			<tx:method name="persist" propagation="REQUIRED" />
+			<tx:method name="merge" propagation="REQUIRED" />
+			<tx:method name="delete*" propagation="REQUIRED" />
+			<tx:method name="find*" read-only="true" />
+		</tx:attributes>
+	</tx:advice>
+	<aop:config>
+		<aop:advisor pointcut="execution(* com.ssh.demo.dao.*.*(..))"
+			advice-ref="txAdvice" />
+	</aop:config>
+	<!-- service -->
+	<bean id="blogService" class="com.ssh.demo.service.BlogService">
+		<property name="blogdao" ref="blogDao" />
+	</bean>
+	<!-- dwr -->
+	<!-- action -->
+	<bean id="BlogAction" class="com.ssh.demo.action.BlogAction">
+		<property name="blogService" ref="blogService" />
+	</bean>
+</beans>

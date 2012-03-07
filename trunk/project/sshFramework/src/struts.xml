@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.1//EN" "http://struts.apache.org/dtds/struts-2.1.dtd" >
+<struts>
+	<constant name="struts.enable.DynamicMethodInvocation" value="true" />
+	<constant name="struts.objectFactory" value="spring" />
+	<package name="struts-parent" extends="struts-default">
+		<!--		 定义一个名为sysInterCepter的拦截器 -->
+		<interceptors>
+			<interceptor name="sysInterCepter" class="com.ssh.demo.action.SysInterCepter"></interceptor>
+			<!--
+			定义一个包含权限检查的拦截器栈
+			-->
+			<interceptor-stack name="sys">
+				<interceptor-ref name="sysInterCepter"></interceptor-ref>
+				<!-- 必须写这个，否则参数无法传递 -->
+				<interceptor-ref name="defaultStack"></interceptor-ref>
+			</interceptor-stack>
+		</interceptors>
+		<!-- 自动拦截 name可以是单个拦截器，也可以是栈 -->
+		<default-interceptor-ref name="sys">
+		</default-interceptor-ref>
+		<!--
+			定义全局result 
+		-->
+		<global-results>
+			<result name="login">/login.jsp</result>
+		</global-results>
+	</package>
+		<include file="struts-action.xml"></include>
+</struts>
