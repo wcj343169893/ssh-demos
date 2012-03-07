@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dwr PUBLIC "-//GetAhead Limited//DTD Direct Web Remoting 3.0//EN" "http://getahead.org/dwr/dwr30.dtd">
+
+<dwr>
+    <!--
+    <allow>
+    <create creator="spring" javascript="ShowCustName">
+    <param name="beanName" value="ShowCustName"></param>
+    </create>
+    <create creator="spring" javascript="ShowDictType">
+    <param name="beanName" value="ShowDictType"></param>
+    </create>
+    <convert  converter="bean" match="com.chaojun.entity.CstCustomer"></convert>
+    <convert  converter="bean" match="com.chaojun.entity.CstService"></convert>
+    <convert  converter="bean" match="com.chaojun.entity.CstLinkman"></convert>
+    <convert  converter="bean" match="com.chaojun.entity.BasDict"></convert>
+    <convert  converter="bean" match="com.chaojun.entity.SysUsr"></convert>
+    <convert  converter="bean" match="com.chaojun.entity.Orders"></convert>
+    <convert  converter="bean" match="com.chaojun.entity.CstActivity"></convert>
+    <convert  converter="bean" match="com.chaojun.entity.SalChance"></convert>
+    <convert  converter="bean" match="com.chaojun.entity.OrdersLine"></convert>
+    <convert  converter="bean" match="com.chaojun.entity.SalPlan"></convert>
+    </allow>
+    -->
+</dwr>
